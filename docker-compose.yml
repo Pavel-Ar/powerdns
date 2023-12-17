@@ -65,5 +65,5 @@ services:
     ports:
       - 80:80/TCP
       - 8080:8080/TCP
-      - 53:53/TCP
-      - 53:53/UDP
+      - 5353:53/TCP
+      - 5353:53/UDP

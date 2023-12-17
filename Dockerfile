@@ -125,9 +125,8 @@ COPY powerdns /etc/powerdns
 COPY entrypoint /usr/bin
 COPY nginx /etc/nginx
 COPY php81 /etc/php81
-COPY poweradmin /var/www/html/poweradmin/inc
+COPY poweradmin /var/www/html/poweradmin
 COPY sql /sql
-ADD locale /var/www/html/poweradmin/locale
 
 RUN set -eux; \
   addgroup -S powerdns 2>/dev/null; \
@@ -140,18 +139,14 @@ RUN set -eux; \
   chmod 0755 /run/powerdns; \
   chown -R root:powerdns /etc/powerdns; \
   chown -R nginx:nginx /var/www/html; \
-  chown -R powerdns:powerdns /run/powerdns
+  chown -R powerdns:powerdns /run/powerdns;
 
 #bug source correction
 RUN set -eux; \
   sed -i "s!latin1!utf8mb4!g" /sql/pdns_schema.sql; \
   sed -i "s!latin1!utf8mb4!g" /sql/poweradmin.sql; \
   # ERROR 1074 (42000) Column length too big (max = 21844); use BLOB or TEXT instead
-  sed -i "s!VARCHAR(64000) DEFAULT NULL!TEXT(64000) DEFAULT NULL!g" /sql/pdns_schema.sql; \
-  # BUGs Undefined constant id,error
-  #patch /var/www/html/poweradmin/dnssec_add_key.php /var/www/html/poweradmin/inc/dnssec_add_key.diff; \
-  #patch /var/www/html/poweradmin/dnssec_edit_key.php /var/www/html/poweradmin/inc/dnssec_edit_key.diff; \
-  rm -r /var/www/html/poweradmin/inc/dnssec_add_key.diff /var/www/html/poweradmin/inc/dnssec_edit_key.diff
+  sed -i "s!VARCHAR(64000) DEFAULT NULL!TEXT(64000) DEFAULT NULL!g" /sql/pdns_schema.sql;
 
 #clear source
 RUN set -eux; \
@@ -165,7 +160,6 @@ RUN set -eux; \
   rm -r /var/www/html/poweradmin/VAGRANT.md; \
   rm -r /var/www/html/poweradmin/Vagrantfile; \
   rm -r /var/www/html/poweradmin/Dockerfile
-
 
 EXPOSE 53
 EXPOSE 53/UDP
