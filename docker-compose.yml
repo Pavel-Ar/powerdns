@@ -23,13 +23,13 @@ services:
     networks:
       - powerdns
     environment:
-      - MYSQL_ROOT_PASSWORD=root_pass
-      - MYSQL_DATABASE=pdns_db
-      - MYSQL_USER=pdns_user
-      - MYSQL_PASSWORD=pdns_pass
+      - MARIADB_ROOT_PASSWORD=root_pass
+      - MARIADB_DATABASE=pdns_db
+      - MARIADB_USER=pdns_user
+      - MARIADB_PASSWORD=pdns_pass
 
   powerdns:
-    image: rootshellcoder/powerdns:latest
+    image: powerdns:latest
     networks:
       - powerdns
     environment:
